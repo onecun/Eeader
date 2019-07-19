@@ -23,14 +23,14 @@ const loadFile = async (blob) => {
 }
 
 // 获取 container.xml
-const containerXml = async () => {
+const containerXml = async (blob) => {
     unzip = await loadFile(blob)
     return await unzip.files["META-INF/container.xml"].async('string')
 }
 
 // 读取 contentOpt 文件
-const contentOpt = async () => {
-    let temp_containerxml = await containerXml()
+const contentOpt = async (blob) => {
+    let temp_containerxml = await containerXml(blob)
     // 解析 container.xml 为 DOM
     let containerDom = domparser.parseFromString(temp_containerxml, 'text/xml')
     // 获取 content.opf 文件地址
@@ -41,11 +41,11 @@ const contentOpt = async () => {
     return await zip.file(fullPath).async('string')
 }
 
-const sectionUrlAndToc = async () => {
+const sectionUrlAndToc = async (blob) => {
     // 获取 toc.ncx 地址
     tocUrl = realUrl('toc.ncx')
     // 
-    let temp_contentopf = await contentOpt()
+    let temp_contentopf = await contentOpt(blob)
     contentOpfDom = domparser.parseFromString(temp_contentopf, 'text/xml')
     // 获取 图书显示顺序
     spines = contentOpfDom.getElementsByTagName('spine')[0].children
@@ -59,8 +59,8 @@ const sectionUrlAndToc = async () => {
     return sectionUrl  
 }
 
-const allSection = async () => {
-    let temp_section_array = await sectionUrlAndToc()
+const allSection = async (blob) => {
+    let temp_section_array = await sectionUrlAndToc(blob)
     let sectionString = temp_section_array.map(async (url) => {
         let real = realUrl(url)
         let item = await unzip.files[real].async('string')
@@ -72,7 +72,8 @@ const allSection = async () => {
     return sectionString
 }
 
-const parsedEpub = async () => {
+const parsedEpub = async (blob) => {
+    reflash()
     // utils
     const imgUrl = async (section) => {
         let secDom = domparser.parseFromString(await section, 'text/html')    
@@ -102,7 +103,7 @@ const parsedEpub = async () => {
         return secDom
     }
 
-    let sectionsString = await allSection()
+    let sectionsString = await allSection(blob)
     console.log(sectionsString)
     //
     let save = []
@@ -117,6 +118,16 @@ const parsedEpub = async () => {
         })
     }
     return save
+}
+
+const reflash = () => {
+    unzip = undefined
+    fullPath = undefined
+    OEBPSFolderName = undefined
+    contentOpfDom = undefined 
+    spines = undefined 
+    tocUrl = undefined
+    realSecUrl = []
 }
 
 export default parsedEpub
