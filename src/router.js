@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
-import test from './views/test.vue'
+import Reader from './views/Reader.vue'
 
 Vue.use(Router)
 
@@ -18,9 +18,9 @@ export default new Router({
     //     component: () => import('./views/ImportEpub.vue'),
     // }
     {
-        path: '/test/:bookname',
-        name: 'test',
-        component: test,
+        path: '/reader/:bookname',
+        name: 'reader',
+        component: Reader,
     }
   ]
 })

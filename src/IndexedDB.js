@@ -17,7 +17,7 @@ export const initDB = function (dbName, version = 1) {
             db = DBRequest.result // or event.target.result
             // ... 其他事情
             console.log('打开成功')
-            resolve()
+            resolve('open')
         }
 
         // 数据库首次创建 或 版本升级(即 version 的数值 比以前的大)
@@ -25,7 +25,7 @@ export const initDB = function (dbName, version = 1) {
             db = event.target.result
             // 创建一个数据库存储对象， 设置 'relativeurl' 是主键
             var objectStore = db.createObjectStore(dbName, {
-                keyPath: 'relativeurl',
+                keyPath: 'id',
             })
             // 创建字段
             objectStore.createIndex('relativeurl', 'relativeurl', {
@@ -33,19 +33,20 @@ export const initDB = function (dbName, version = 1) {
             })
             objectStore.createIndex('content', 'content')
             console.log('第一次打开成功')
-            resolve()            
+            resolve('first-open')            
         }
     })
 
 }
 
 export const dbmethods = {
-    add(dbName, newItem) {
+    add(dbName, newItem, id) {
         return new Promise((resolve, reject) => {
             let transaction = db.transaction([dbName], "readwrite")
             // 打开已经存储的数据对象
             let objectStore = transaction.objectStore(dbName)
             // 添加到数据对象
+            newItem.id = id
             let objectStoreRequest = objectStore.add(newItem)
             objectStoreRequest.onsuccess = function (event) {
                 console.log('写入成功')

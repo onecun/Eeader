@@ -11,13 +11,9 @@
 
 <script>
 import {
-    db,
     initDB,
     dbmethods
 } from '@/IndexedDB.js'
-import {
-    async
-} from 'q';
 
 export default {
     data() {
@@ -30,10 +26,10 @@ export default {
         getContent() {
             let openingDb = initDB(this.$route.params.bookname)
             openingDb.then(() => {
-                console.log('123')
-                let content = dbmethods.read(this.$route.params.bookname, this.$route.query.url)
-                content.then(c => {
-                    this.bookContent = c
+                let id = 0
+                let content = dbmethods.read(this.$route.params.bookname, id)
+                content.then(content => {
+                    this.bookContent = content
                 })
             })
 
