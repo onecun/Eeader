@@ -1,8 +1,9 @@
 const domparser = new DOMParser()
 const zip = new JSZip()
 let unzip
-let fullPath, OEBPSFolderName, contentOpfDom, spines, tocUrl
+let fullPath, OEBPSFolderName, contentOpfDom, spines
 let realSecUrl = []
+let toc = []
 
 // utils
 const imgType = function(href) {
@@ -38,12 +39,10 @@ const contentOpt = async (blob) => {
     // 如果没有 OEBPS 文件夹，设置为 ''
     OEBPSFolderName = fullPath.split('/')[0] === 'content.opf' ? '' : fullPath.split('/')[0]
     // 读取 contentOpt 文件
-    return await zip.file(fullPath).async('string')
+    return await unzip.files[fullPath].async('string')
 }
 
 const sectionUrlAndToc = async (blob) => {
-    // 获取 toc.ncx 地址
-    tocUrl = realUrl('toc.ncx')
     // 
     let temp_contentopf = await contentOpt(blob)
     contentOpfDom = domparser.parseFromString(temp_contentopf, 'text/xml')
@@ -105,7 +104,7 @@ const parsedEpub = async (blob) => {
 
     let sectionsString = await allSection(blob)
     console.log(sectionsString)
-    //
+    // save 为 需要存储的值
     let save = []
     let len = sectionsString.length
     for (let i = 0; i < len; i++) {
@@ -117,7 +116,22 @@ const parsedEpub = async (blob) => {
             'content': `${secDom.querySelector('body').innerHTML}`,
         })
     }
-    return save
+    // 获取 toc.ncx 地址
+    let tocUrl = realUrl('toc.ncx')
+    let temp_tocxml = await unzip.files[tocUrl].async('string')
+    let tocDom = domparser.parseFromString(temp_tocxml, 'text/xml')
+    toc = tocDom.querySelectorAll('navPoint')
+    let nav = []
+    for (let i = 0; i < toc.length; i++) {
+        const secName = `${toc[i].querySelector('text').innerHTML}`
+        const sectionUrl = realUrl(`${toc[i].querySelector('content').getAttribute('src')}`).split('#')[0]
+        nav.push({
+            'secName': secName,
+            'sectionUrl': sectionUrl,
+        })
+    }
+
+    return [save, nav]
 }
 
 const reflash = () => {
@@ -125,8 +139,7 @@ const reflash = () => {
     fullPath = undefined
     OEBPSFolderName = undefined
     contentOpfDom = undefined 
-    spines = undefined 
-    tocUrl = undefined
+    spines = undefined
     realSecUrl = []
 }
 

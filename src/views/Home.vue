@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-      <Sidebar></Sidebar>
+      <SidebarBookShelf></SidebarBookShelf>
       <BookShelf></BookShelf>
   </div>
 </template>
@@ -9,13 +9,13 @@
 // @ is an alias to /src
 // import HelloWorld from '@/components/HelloWorld.vue'
 import BookShelf from '@/components/BookShelf.vue'
-import Sidebar from '@/components/Sidebar.vue'
+import SidebarBookShelf from '@/components/SidebarBookShelf.vue'
 
 export default {
   name: 'home',
   components: {
     BookShelf,
-    Sidebar,
+    SidebarBookShelf,
   }
 }
 </script>

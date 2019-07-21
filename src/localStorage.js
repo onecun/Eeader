@@ -18,11 +18,11 @@ export default {
         if (str) {
             return JSON.parse(str)
         } else {
-            return str
+            return []
         }
     },
-    saveLocal(str) {
+    saveLocal(json) {
         this.clearLocal()
-        localStorage.setItem('books', JSON.stringify(str))
+        localStorage.setItem('books', JSON.stringify(json))
     },
 }

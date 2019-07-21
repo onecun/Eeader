@@ -1,40 +1,22 @@
 <template>
-<div>
-    <div class="loading" v-if="loading">加载中</div>
-    <div>{{$route.params.bookname}}</div>
-    <div>{{ $route.query.url }}</div>
-    <button @click="getContent()">冲</button>
-    <div v-html="bookContent"></div>
-
+<div class="reader">
+    <SidebarReader></SidebarReader>
+    <ReaderWrap></ReaderWrap>
 </div>
 </template>
 
 <script>
-import {
-    initDB,
-    dbmethods
-} from '@/IndexedDB.js'
+import SidebarReader from '@/components/SidebarReader.vue'
+import ReaderWrap from '@/components/ReaderWrap.vue'
 
 export default {
-    data() {
-        return {
-            loading: true,
-            bookContent: '',
-        }
-    },
-    methods: {
-        getContent() {
-            let openingDb = initDB(this.$route.params.bookname)
-            openingDb.then(() => {
-                let id = 0
-                let content = dbmethods.read(this.$route.params.bookname, id)
-                content.then(content => {
-                    this.bookContent = content
-                })
-            })
-
-        }
-    },
-
+    components: {SidebarReader, ReaderWrap},
 }
 </script>
+
+<style lang="scss">
+    .reader {
+        display: flex;
+        justify-content: center;
+    }
+</style>

@@ -25,7 +25,7 @@ export const initDB = function (dbName, version = 1) {
             db = event.target.result
             // 创建一个数据库存储对象， 设置 'relativeurl' 是主键
             var objectStore = db.createObjectStore(dbName, {
-                keyPath: 'id',
+                keyPath: 'section',
             })
             // 创建字段
             objectStore.createIndex('relativeurl', 'relativeurl', {
@@ -40,13 +40,13 @@ export const initDB = function (dbName, version = 1) {
 }
 
 export const dbmethods = {
-    add(dbName, newItem, id) {
+    add(dbName, newItem, section) {
         return new Promise((resolve, reject) => {
             let transaction = db.transaction([dbName], "readwrite")
             // 打开已经存储的数据对象
             let objectStore = transaction.objectStore(dbName)
             // 添加到数据对象
-            newItem.id = id
+            newItem.section = section
             let objectStoreRequest = objectStore.add(newItem)
             objectStoreRequest.onsuccess = function (event) {
                 console.log('写入成功')
@@ -66,7 +66,7 @@ export const dbmethods = {
             objectStoreRequest.onsuccess = function (event) {
                 // 对 request.result 做些操作！
                 console.log('读取成功', event.target.result)
-                resolve(event.target.result.content)
+                resolve(event.target.result)
             }
             objectStoreRequest.onerror = function (event) {
                 console.log('读取失败')
@@ -74,4 +74,22 @@ export const dbmethods = {
             }
         })
     },
+    // 使用索引查找
+    indexRead(dbName, key) {
+        return new Promise((resolve, reject) => {
+            let transaction = db.transaction([dbName])
+            let objectStore = transaction.objectStore(dbName)
+            let index = objectStore.index('relativeurl')
+            index.get(key)
+            index.onsuccess = function (event) {
+                // 对 request.result 做些操作！
+                console.log('读取成功', event.target.result)
+                resolve(event.target.result.content)
+            }
+            index.onerror = function (event) {
+                console.log('读取失败')
+                reject('读取失败')
+            }
+        })
+    }
 }

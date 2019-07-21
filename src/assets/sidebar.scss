@@ -1,0 +1,36 @@
+.sidebar {
+    width: 10%;
+    margin-right: 20px;
+    text-align: left;
+
+    .book-shelf-small, .catalog {
+        font-size: 14px;
+        font-weight: 600;
+        color: #ee4259;
+        border: 1px solid #e0deda;
+        background: #fff;
+        line-height: 36px;
+        position: relative;
+        cursor: pointer;
+        border-radius: 4px;
+        display: flex;
+        flex-direction: column;
+
+        .sidebar-item-title {
+            padding: 0 20px;
+            height: 48px;
+            line-height: 48px;
+            border-bottom: 1px solid #ebeef5;
+        }
+    }
+    
+}
+
+.sidebar-collapse-item {
+    font-weight: 500;
+    color: #2c3e50;
+    padding: 0 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
