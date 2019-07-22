@@ -1,6 +1,6 @@
 <template>
 <div class="book-shelf-wrapper">
-    <div v-for="(bookdata, index) in bookList" :key="index" class="book-item" @click="toReader(bookdata)">
+    <div v-for="(bookdata, index) in bookList" :key="index" class="book-item" @click="jumpTo(bookdata.bookname)">
         <div v-html="bookdata.cover" class="book-cover"></div>
         <div class="book-name">{{ bookdata.bookname }}</div>
     </div>
@@ -26,8 +26,10 @@ import {
     dbmethods
 } from '@/IndexedDB.js'
 import localStorage from '@/localStorage.js'
+import {bookShelf} from '@/mixins/bookShelf.js'
 
 export default {
+    mixins: [bookShelf],
     data() {
         return {
             // 存储每本书的第一页地址
@@ -67,9 +69,12 @@ export default {
                                 let nav = data[1]
                                 dbmethods.add(this.currDbName, nav, 0)
                                 // 存入数据 data[0] 就是需要存储的文章内容
-                                data[0].map((sec, index) => {
-                                    dbmethods.add(this.currDbName, sec, index + 1)
-                                })
+                                let secs = data[0]
+                                let len = secs.length
+                                for (let i = 0; i < len; i++) {
+                                    let sec = secs[i]
+                                    dbmethods.add(this.currDbName, sec, i + 1)
+                                }
                             })
                             .then(() => {
                                 // 获取封面
@@ -99,22 +104,15 @@ export default {
                     this.$store.commit('addbook', bookdata)
                 })
         },
-        toReader(bookdata) {
-            this.$router.push({
-                name: 'reader',
-                params: {
-                    bookname: bookdata.bookname
-                },
-            })
-        },
+
         localSave() {
             localStorage.saveLocal(this.booksName)
         },
     },
     mounted() {
+        console.log('123')
         let books = localStorage.getLocal()
         this.booksName = books
-        console.log(books)
         if (books.length >= 1) {
             books.map(bookName => {
                 initDB(bookName).then(() => {
@@ -132,7 +130,6 @@ export default {
     width: 50%;
     min-height: 370px;
     flex-wrap: wrap;
-    justify-content: space-between;
     border-radius: 4px;
     background-color: #fff;
     box-shadow: 1px 1px 4px rgba(0, 0, 0, .35), 0 0 5px #f9f2e9 inset;

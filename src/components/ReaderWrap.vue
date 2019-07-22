@@ -10,9 +10,16 @@ import { initDB, dbmethods } from '@/IndexedDB.js'
 export default {
     data() {
         return {
+            currBook: '',
             content: '',
             domparser: '',
         }
+    },
+    computed: {
+        currUrl() {
+            return this.$store.state.readerCurrContentUrl
+        },
+
     },
     methods: {
         removeLink(string) {
@@ -27,6 +34,25 @@ export default {
             }
             return `${dom.querySelector('body').innerHTML}`
         },
+        changeAddress(secNumber) {
+            let bookname = this.$route.params.bookname
+            this.$router.replace({ 
+                name: 'reader', 
+                params: {'bookname': bookname},
+                query: {'section': secNumber},
+            })
+        },
+    },
+    watch: {
+        'currUrl': function(url) {
+            initDB(this.currBook).then(() => {
+                return dbmethods.indexRead(this.currBook, url)
+            }).then((section) => {
+                console.log(section)
+                this.content = this.removeLink(section.content)
+                this.changeAddress(section.section)
+            })
+        },
     },
     mounted() {
         this.currBook = this.$route.params.bookname
@@ -37,10 +63,10 @@ export default {
             toc.map(sec => {
                 this.$store.commit('addsec', sec)
             })
-            let cover = 3
+            let cover = 1
             return dbmethods.read(this.currBook, cover)
-        }).then((cover) => {
-            this.content = this.removeLink(cover.content)
+        }).then((section) => {
+            this.content = this.removeLink(section.content)
         })
     },
 }
@@ -49,14 +75,40 @@ export default {
 <style lang='scss' rel='stylesheet/scss'>
 .reader-wrap {
     display: flex;
-    width: 64%;
-    min-height: 1000px;
+    width: 56%;
     flex-wrap: wrap;
     border-radius: 4px;
-    border: 1px solid black;
+    background-color: #f7f2e8; 
+    border: 1px solid #d8d8d8;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, .35);
+}
 
-    .reader-item-content {
+.reader-item-content {
+    width: 100%;
+    // 自定义
+    font-family: 'Microsoft YaHei',PingFangSC-Regular,HelveticaNeue-Light,'Helvetica Neue Light',sans-serif;
+    text-align: left;
+    font-size: 18px;
+    min-height: 400px;
+    margin-bottom: 24px;
+    padding: 60px 64px;
 
+    h1, h2, h3 {
+        font: 24px/32px PingFangSC-Regular,HelveticaNeue-Light,'Helvetica Neue Light','Microsoft YaHei',sans-serif;
+        overflow: hidden;
+        height: 32px;
+        margin-bottom: 12px;
+        font-weight: 600;
+    }
+    img, svg {
+        width: 50%;
+        display: block;
+        margin: 0 auto;
+    }
+    div, p {
+        line-height: 1.8;
+        overflow: hidden;
+        margin: .8em 0;
     }
 }
 </style>

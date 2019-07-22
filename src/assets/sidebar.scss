@@ -2,12 +2,16 @@
     width: 10%;
     margin-right: 20px;
     text-align: left;
-
-    .book-shelf-small, .catalog {
+    overflow: hidden;
+    
+    .book-shelf-small,
+    .catalog,
+    .sidebar-item-title {
         font-size: 14px;
         font-weight: 600;
         color: #ee4259;
         border: 1px solid #e0deda;
+        border-top: none;
         background: #fff;
         line-height: 36px;
         position: relative;
@@ -15,19 +19,24 @@
         border-radius: 4px;
         display: flex;
         flex-direction: column;
-
-        .sidebar-item-title {
-            padding: 0 20px;
-            height: 48px;
-            line-height: 48px;
-            border-bottom: 1px solid #ebeef5;
-        }
     }
-    
+
+    .sidebar-item-title {
+        padding: 0 20px;
+        height: 48px;
+        line-height: 48px;
+        border-bottom: 1px solid #ebeef5;
+        z-index: 20;
+    }
+
+    .sidebar-item-book:hover {
+        background-color: rgba($color: #000000, $alpha: 0.04);
+    }
 }
 
 .sidebar-collapse-item {
     font-weight: 500;
+    height: 36px;
     color: #2c3e50;
     padding: 0 20px;
     overflow: hidden;

@@ -1,8 +1,8 @@
 <template>
     <aside class="sidebar">
-        <div class="book-shelf-small">
-            <header @click.self="show(1)" class="sidebar-item-title">书架</header>
-            <div v-show="isShow === 1" v-for="(bookdata, index) in bookList" :key="index" class="sidebar-item-book">
+        <header @click.self="show(1)" class="sidebar-item-title">书架</header>
+        <div v-show="isShow === 1" class="book-shelf-small">
+            <div v-for="(bookdata, index) in bookList" :key="index" class="sidebar-item-book">
                 <div @click="jumpTo(bookdata.bookname)" class="sidebar-book-name sidebar-collapse-item">{{ bookdata.bookname }}</div>
             </div>
         </div>
@@ -10,33 +10,18 @@
 </template>
 
 <script>
+import {bookShelf} from '@/mixins/bookShelf.js'
+import {sidebar} from '@/mixins/sidebar.js'
+
 export default {
-    data() {
-        return {
-            isShow: 1,
-        }
-    },
+    mixins: [bookShelf, sidebar],
+    
     computed: {
         bookList() {
             return this.$store.state.booklist
         } 
     },
-    methods: {
-        show(select) {
-            if (select === 1 && this.isShow !== 1) {
-                this.isShow = 1
-            } else {
-                this.isShow = 0
-            }
-        },
-        jumpTo(bookname) {
-            this.$router.push({
-                name: 'reader',
-                params: {'bookname': bookname},
-            })
-        },
-
-    },
+    
 
 }
 </script>

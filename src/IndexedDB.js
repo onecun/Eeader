@@ -23,12 +23,15 @@ export const initDB = function (dbName, version = 1) {
         // 数据库首次创建 或 版本升级(即 version 的数值 比以前的大)
         DBRequest.onupgradeneeded = function (event) {
             db = event.target.result
-            // 创建一个数据库存储对象， 设置 'relativeurl' 是主键
+            // 创建一个数据库存储对象， 设置主键
             var objectStore = db.createObjectStore(dbName, {
-                keyPath: 'section',
+                keyPath: 'id',
             })
             // 创建字段
             objectStore.createIndex('relativeurl', 'relativeurl', {
+                unique: true
+            })
+            objectStore.createIndex('section', 'section', {
                 unique: true
             })
             objectStore.createIndex('content', 'content')
@@ -46,6 +49,7 @@ export const dbmethods = {
             // 打开已经存储的数据对象
             let objectStore = transaction.objectStore(dbName)
             // 添加到数据对象
+            newItem.id = section
             newItem.section = section
             let objectStoreRequest = objectStore.add(newItem)
             objectStoreRequest.onsuccess = function (event) {
@@ -80,13 +84,14 @@ export const dbmethods = {
             let transaction = db.transaction([dbName])
             let objectStore = transaction.objectStore(dbName)
             let index = objectStore.index('relativeurl')
-            index.get(key)
-            index.onsuccess = function (event) {
+            let indexResult = index.get(key)
+            console.log(key)
+            indexResult.onsuccess = function (event) {
                 // 对 request.result 做些操作！
                 console.log('读取成功', event.target.result)
-                resolve(event.target.result.content)
+                resolve(event.target.result)
             }
-            index.onerror = function (event) {
+            indexResult.onerror = function (event) {
                 console.log('读取失败')
                 reject('读取失败')
             }

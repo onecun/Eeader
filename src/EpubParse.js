@@ -60,14 +60,17 @@ const sectionUrlAndToc = async (blob) => {
 
 const allSection = async (blob) => {
     let temp_section_array = await sectionUrlAndToc(blob)
-    let sectionString = temp_section_array.map(async (url) => {
+    let  sectionString = []
+    let len = temp_section_array.length
+    for (let i = 0; i < len; i++) {
+        const url = temp_section_array[i]
         let real = realUrl(url)
         let item = await unzip.files[real].async('string')
         // 返回 section 和 他的地址
         console.log(real)
         realSecUrl.push(real)
-        return item
-    })
+        sectionString.push(item)
+    }
     return sectionString
 }
 

@@ -7,6 +7,7 @@ export default new Vuex.Store({
   state: {
       booklist: [],
       secList: [],
+      readerCurrContentUrl: '',
   },
   mutations: {
       addbook (state, book) {
@@ -14,6 +15,9 @@ export default new Vuex.Store({
       },
       addsec (state, sec) {
           state.secList.push(sec)
+      },
+      changeurl (state, url) {
+          state.readerCurrContentUrl = url
       },
   },
   actions: {
