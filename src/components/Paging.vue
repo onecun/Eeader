@@ -32,8 +32,9 @@ export default {
                 // section 加一 获取下一页
                 return dbmethods.read(bookData[0], bookData[1] + 1)
             }).then((section) => {
-                console.log(section)
                this.$emit('page-turing', section)
+            }).catch((err) => {
+                console.log('err', err)
             })
         },
     },

@@ -1,10 +1,10 @@
 <template>
 <div class="reader" :class="curTheme">
     <SidebarReader></SidebarReader>
-    <ReaderWrap></ReaderWrap>
+    <ReaderWrap :class="curFontFamily"></ReaderWrap>
     <ReaderSetBar @popup='showPopup = !showPopup'></ReaderSetBar>
     <div v-if="showPopup">
-        <SettingPopup @switch-theme='switchTheme($event)'></SettingPopup>
+        <SettingPopup @hide-popup='showPopup = false' :curFontSize='curFontSize' @switch-theme='switchTheme($event)' @switch-fontfamily='switchFontFamily($event)' @set-font-size='setFontSize($event)'></SettingPopup>
     </div>
 </div>
 </template>
@@ -19,6 +19,8 @@ export default {
         return {
             showPopup: false,
             selectTheme: 0,
+            selectFontFamily: '',
+            curFontSize: 18,
         }
     },
     computed: {
@@ -32,6 +34,14 @@ export default {
             }
             return themes[this.selectTheme]
         },
+        curFontFamily() {
+            let fontFamily = {
+                '雅黑': {'yahei': true},
+                '宋体': {'song': true},
+                '楷体': {'kai': true},
+            }
+            return fontFamily[this.selectFontFamily]
+        },
     },
     components: {
         SidebarReader, 
@@ -42,6 +52,16 @@ export default {
     methods: {
         switchTheme(theme) {
             this.selectTheme = theme
+        },
+        switchFontFamily(fontFamily) {
+            this.selectFontFamily = fontFamily
+        },
+        setFontSize(size) {
+            if (size > 48 || size < 12) {
+                return
+            }
+            this.curFontSize = size
+            document.querySelector('.reader-item-content').style.fontSize = `${size}px`
         },
     },
 }
@@ -77,6 +97,24 @@ export default {
         * {
             background: #161819 !important;
             color: #666 !important;
+        }
+    }
+    .yahei {
+        font-family: PingFangSC-Regular,HelveticaNeue-Light,'Helvetica Neue Light','Microsoft YaHei',sans-serif !important;
+        * {
+            font-family: PingFangSC-Regular,HelveticaNeue-Light,'Helvetica Neue Light','Microsoft YaHei',sans-serif !important;
+        }
+    }
+    .song {
+        font-family: PingFangSC-Regular,'-apple-system',Simsun !important;
+        * {
+            font-family: PingFangSC-Regular,'-apple-system',Simsun !important;
+        }
+    }
+    .kai {
+        font-family: Kaiti !important;
+        * {
+            font-family: Kaiti !important;
         }
     }
 </style>

@@ -46,7 +46,6 @@ export default {
             })
         },
         pageTurning(section) {
-            console.log(section)
             this.content = this.removeLink(section.content)
             this.changeAddress(section.section)
         },
@@ -76,6 +75,8 @@ export default {
         }).then((section) => {
             this.content = this.removeLink(section.content)
         })
+        //
+        this.changeAddress(1)
     },
 }
 </script>
@@ -104,7 +105,7 @@ export default {
 
     h1, h2, h3 {
         font: 24px/32px PingFangSC-Regular,HelveticaNeue-Light,'Helvetica Neue Light','Microsoft YaHei',sans-serif;
-        overflow: hidden;
+        // overflow: hidden;
         height: 32px;
         margin-bottom: 12px;
         font-weight: 600;
@@ -114,7 +115,7 @@ export default {
         display: block;
         margin: 0 auto;
     }
-    div, p {
+    div, p, a {
         line-height: 1.8;
         overflow: hidden;
         margin: .8em 0;
