@@ -1,13 +1,16 @@
 <template>
 <div class="reader-wrap">
     <div v-html="content" class="reader-item-content"></div>
+    <paging @page-turing='pageTurning($event)'></paging>
 </div>
 </template>
 
 <script>
 import { initDB, dbmethods } from '@/IndexedDB.js'
+import paging from './Paging.vue'
 
 export default {
+    components: {paging},
     data() {
         return {
             currBook: '',
@@ -41,6 +44,11 @@ export default {
                 params: {'bookname': bookname},
                 query: {'section': secNumber},
             })
+        },
+        pageTurning(section) {
+            console.log(section)
+            this.content = this.removeLink(section.content)
+            this.changeAddress(section.section)
         },
     },
     watch: {
@@ -81,6 +89,7 @@ export default {
     background-color: #f7f2e8; 
     border: 1px solid #d8d8d8;
     box-shadow: 0 1px 6px rgba(0, 0, 0, .35);
+    margin-bottom: 30px;
 }
 
 .reader-item-content {
@@ -90,8 +99,8 @@ export default {
     text-align: left;
     font-size: 18px;
     min-height: 400px;
-    margin-bottom: 24px;
     padding: 60px 64px;
+    padding-bottom: 30px; 
 
     h1, h2, h3 {
         font: 24px/32px PingFangSC-Regular,HelveticaNeue-Light,'Helvetica Neue Light','Microsoft YaHei',sans-serif;

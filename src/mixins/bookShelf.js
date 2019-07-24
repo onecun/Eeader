@@ -4,7 +4,7 @@ export const bookShelf = {
             this.$router.push({
                 name: 'reader',
                 params: {'bookname': bookname},
-                query: {'section': 0},
+                query: {'section': 1},
             })
         },
     }
