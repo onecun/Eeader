@@ -73,48 +73,5 @@ export default {
         justify-content: center;
     }
 
-    .theme-1 {
-        background: #e9e3d6 !important;
-
-        * {
-            background: #f6f1e7 !important;
-        }
-    }
-    .theme-2 {
-        background: #decda1 !important;
-        * {
-            background: #f3e9c7 !important;
-        }
-    }
-    .theme-3 {
-        background: #d3d3d3 !important;
-        * {
-            background: #dcdcdc !important;
-        }
-    }
-    .theme-4 {
-        background: #101214 !important;
-        * {
-            background: #161819 !important;
-            color: #666 !important;
-        }
-    }
-    .yahei {
-        font-family: PingFangSC-Regular,HelveticaNeue-Light,'Helvetica Neue Light','Microsoft YaHei',sans-serif !important;
-        * {
-            font-family: PingFangSC-Regular,HelveticaNeue-Light,'Helvetica Neue Light','Microsoft YaHei',sans-serif !important;
-        }
-    }
-    .song {
-        font-family: PingFangSC-Regular,'-apple-system',Simsun !important;
-        * {
-            font-family: PingFangSC-Regular,'-apple-system',Simsun !important;
-        }
-    }
-    .kai {
-        font-family: Kaiti !important;
-        * {
-            font-family: Kaiti !important;
-        }
-    }
+    @import '../assets/readerContent.scss';
 </style>
