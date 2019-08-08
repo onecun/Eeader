@@ -33,16 +33,16 @@
 
 **书架页**
 
-![](C:\Users\Apsd\Desktop\projects\epub-parse\epub-web-reader\docs\imgs\bookshelf.gif)
+![](./docs/imgs/bookshelf.gif)
 
 **阅读页**
 
-![](C:\Users\Apsd\Desktop\projects\epub-parse\epub-web-reader\docs\imgs\bookReader.gif)
+![](./docs/imgs/bookReader.gif)
 
 **选择章节**
 
-![](C:\Users\Apsd\Desktop\projects\epub-parse\epub-web-reader\docs\imgs\toc.gif)
+![](./docs/imgs/toc.gif)
 
 **设置**
 
-![](C:\Users\Apsd\Desktop\projects\epub-parse\epub-web-reader\docs\imgs\seting.gif)
+![](./docs/imgs/seting.gif)
